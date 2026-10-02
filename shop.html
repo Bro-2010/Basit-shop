@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nana's Provision Shop, Tamale</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --soft:#eef5ee; --ink:#14231a; --muted:#4f6355;
+  --green:#15603a; --on-green:#ffffff; --sun:#f4a712; --line:#d5e2d6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0f1a13; --soft:#17261c; --ink:#eef5ee; --muted:#a7bbab; --green:#3fae72; --on-green:#07140c; --line:#27402f;}
+}
+:root[data-theme="dark"]{--bg:#0f1a13; --soft:#17261c; --ink:#eef5ee; --muted:#a7bbab; --green:#3fae72; --on-green:#07140c; --line:#27402f;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px}
+header.hero{background:var(--green);color:var(--on-green);padding:44px 0 36px}
+.hero h1{font-size:clamp(2.1rem,9vw,3.4rem);line-height:1.05;margin:0 0 12px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 22px;font-size:1.1rem;max-width:34ch}
+.btn{display:inline-block;background:var(--sun);color:#1b1300;font-weight:800;text-decoration:none;padding:14px 22px;border-radius:999px;font-size:1.05rem;border:0;cursor:pointer;font-family:inherit}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.btn.alt{background:transparent;color:inherit;border:2px solid currentColor;margin-left:6px}
+section{padding:34px 0}
+h2{font-size:1.6rem;margin:0 0 6px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 18px}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:8px}
+.chip{flex:none;border:2px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 16px;border-radius:999px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.95rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.list{list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.item b{display:block;font-size:1.05rem}
+.item span{color:var(--muted);font-size:.9rem}
+.price{font-weight:800;white-space:nowrap}
+.order{background:var(--green);color:var(--on-green);text-decoration:none;font-weight:600;padding:9px 14px;border-radius:10px;font-size:.9rem;white-space:nowrap}
+.right{display:flex;align-items:center;gap:12px}
+.soft{background:var(--soft)}
+.info{display:grid;gap:14px}
+.info div{padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.info dt{font-weight:800;margin-bottom:2px}
+.info dd{margin:0;color:var(--muted)}
+footer{padding:22px 0 32px;text-align:center;color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:no-preference){.btn,.order{transition:transform .12s}.btn:active,.order:active{transform:scale(.96)}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Nana's Provision Shop</h1>
+    <p>Rice, oil, tomato paste, drinks and more. Fresh stock every week in Tamale.</p>
+    <a class="btn" id="chatTop" href="#">Order on WhatsApp</a>
+    <a class="btn alt" href="#products">See prices</a>
+  </div>
+</header>
+
+<main>
+  <section id="products">
+    <div class="wrap">
+      <h2>Our products</h2>
+      <p class="sub">Tap Order to send us a WhatsApp message.</p>
+      <div class="filters" id="filters"></div>
+      <ul class="list" id="list"></ul>
+    </div>
+  </section>
+
+  <section class="soft">
+    <div class="wrap">
+      <h2>Visit or call us</h2>
+      <p class="sub">We deliver within Tamale.</p>
+      <dl class="info">
+        <div><dt>Where</dt><dd>Near Aboabo Market, Tamale</dd></div>
+        <div><dt>Open</dt><dd>Monday to Saturday, 7am to 8pm</dd></div>
+        <div><dt>Call</dt><dd><a id="callLink" href="#" style="color:inherit">024 000 0000</a></dd></div>
+        <div><dt>Pay</dt><dd>Cash or MoMo</dd></div>
+      </dl>
+      <p style="margin-top:20px"><a class="btn" id="chatBottom" href="#">Chat with us</a></p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Nana's Provision Shop, Tamale</div></footer>
+
+<script>
+// ===== CHANGE THESE FOR EACH CLIENT =====
+var PHONE = "233240000000";   // WhatsApp number, start with 233, no + and no 0
+var SHOP  = "Nana's Provision Shop";
+var PRODUCTS = [
+  { name: "Rice (5kg bag)",        price: 85,  type: "Food" },
+  { name: "Cooking oil (1 litre)", price: 32,  type: "Food" },
+  { name: "Tomato paste (tin)",    price: 6,   type: "Food" },
+  { name: "Spaghetti (pack)",      price: 5,   type: "Food" },
+  { name: "Sugar (1kg)",           price: 18,  type: "Food" },
+  { name: "Bottled water (pack)",  price: 20,  type: "Drinks" },
+  { name: "Malt drink (crate)",    price: 110, type: "Drinks" },
+  { name: "Soft drink (crate)",    price: 90,  type: "Drinks" },
+  { name: "Bathing soap (box)",    price: 45,  type: "Home" },
+  { name: "Washing powder (1kg)",  price: 25,  type: "Home" }
+];
+// =========================================
+
+function wa(text){
+  return "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(text);
+}
+var list = document.getElementById("list");
+var filters = document.getElementById("filters");
+var current = "All";
+
+function show(){
+  list.innerHTML = "";
+  PRODUCTS.forEach(function(p){
+    if (current !== "All" && p.type !== current) return;
+    var li = document.createElement("li");
+    li.className = "item";
+    li.innerHTML = '<div><b></b><span></span></div><div class="right"><div class="price"></div><a class="order">Order</a></div>';
+    li.querySelector("b").textContent = p.name;
+    li.querySelector("span").textContent = p.type;
+    li.querySelector(".price").textContent = "GHS " + p.price;
+    li.querySelector(".order").href = wa("Hello " + SHOP + ", I want to order: " + p.name + " (GHS " + p.price + ").");
+    list.appendChild(li);
+  });
+}
+function makeFilters(){
+  var types = ["All"];
+  PRODUCTS.forEach(function(p){ if (types.indexOf(p.type) === -1) types.push(p.type); });
+  types.forEach(function(t){
+    var b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = t;
+    b.setAttribute("aria-pressed", t === current ? "true" : "false");
+    b.onclick = function(){
+      current = t;
+      Array.prototype.forEach.call(filters.children, function(c){
+        c.setAttribute("aria-pressed", c === b ? "true" : "false");
+      });
+      show();
+    };
+    filters.appendChild(b);
+  });
+}
+var hello = "Hello " + SHOP + ", I want to ask about your products.";
+document.getElementById("chatTop").href = wa(hello);
+document.getElementById("chatBottom").href = wa(hello);
+document.getElementById("callLink").href = "tel:+" + PHONE;
+makeFilters();
+show();
+</script>
+</body>
+</html>
